@@ -1,7 +1,19 @@
 import collections
 import matplotlib.pyplot as plt
+import os
+import pytagcloud
 
 RESULT_DIRECTORY = '__results__/graph'
+
+def wordcloud(wordsfreq,filename):
+    taglist=pytagcloud.make_tags(wordsfreq.items(),maxsize=50)
+    print(taglist)
+
+
+
+
+
+
 
 def graph_bar(
         title=None,
@@ -42,3 +54,8 @@ def graph_bar(
 
     if showgraph:
         plt.show()
+
+
+if os.path.exists(RESULT_DIRECTORY):
+    os.makedirs()
+
