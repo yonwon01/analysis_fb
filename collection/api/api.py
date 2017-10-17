@@ -17,21 +17,25 @@ def fb_name_to_id(pagename):
 
     return json_result.get('id')
 
-def fb_fetch_posts(pagename,since,until): #페이지관련이름, 언제부터, 언제까지
-    url = fb_gen_url(node=pagename+ "/posts",
-    fields = 'id,message,link,name,type,shares,created_time,reactions.limit(0).summary(true),comments.limit(0).summary(true)',
-                     since=since, until=until,limit=LIMIT_REQUEST, access_token=ACCESS_TOKEN)
+def fb_fetch_posts(pagename, since, until):
+    url = fb_gen_url(
+        node=fb_name_to_id(pagename) + "/posts",
+        fields='id,message,link,name,type,shares,\
+created_time,reactions.limit(0).summary(true),\
+comments.limit(0).summary(true)',
+        since=since,
+        until=until,
+        limit=LIMIT_REQUEST,
+        access_token=ACCESS_TOKEN)
 
-    while True:
-        json_result=json_request(url=url)
-        posts = json_result.get('data')
-        paging= json_result.get('paging') #next라는게 없으면 다음페이지 안가게.
+    isnext = True
+    while isnext is True:
+        json_result = json_request(url=url)
+
+        paging = None if json_result is None else json_result.get('paging')
+        posts = None if json_result is None else json_result.get('data')
+
+        url = None if paging is None else paging.get('next')
+        isnext = url is not None
 
         yield posts
-
-
-        url = paging.get('next')
-        if url is None:
-            break
-
-

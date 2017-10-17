@@ -4,11 +4,6 @@ from datetime import*
 import json
 
 
-
-
-
-
-
 def json_request(url='',encoding='utf-8',success=None, error=lambda e: print('%s : %s' % (e, datetime.now()), file=sys.stderr)):
     try:
 
